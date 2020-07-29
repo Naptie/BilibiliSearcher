@@ -36,6 +36,7 @@ public class Main {
             boolean male = (sex.toLowerCase().contains("male") && !sex.toLowerCase().contains("female")) || (sex.toLowerCase().contains("man") && !sex.toLowerCase().contains("woman")) || sex.toLowerCase().contains("boy") || sex.contains("男") || sex.contains("\\u7537");
             boolean female = sex.toLowerCase().contains("female") || sex.toLowerCase().contains("woman") || sex.toLowerCase().contains("girl") || sex.contains("女") || sex.contains("\\u5973");
             boolean unset = sex.toLowerCase().contains("unset") || sex.toLowerCase().contains("unknown") || sex.contains("保密") || sex.contains("\\u4fdd\\u5bc6");
+            boolean all = (male && female && unset) || sex.equals("");
             /*List<User> maleUsers = new ArrayList<>();
             List<User> femaleUsers = new ArrayList<>();
             List<User> unknownUsers = new ArrayList<>();*/
@@ -56,11 +57,11 @@ public class Main {
                         JSONObject userJson = readJsonFromUrl("http://api.bilibili.com/x/web-interface/card?mid=" + mid);
                         JSONObject card = userJson.getJSONObject("data").getJSONObject("card");
                         User user = new User(card.getString("name"), mid, card.getString("sex"), card.getJSONObject("level_info").getIntValue("current_level"), userJson.getJSONObject("data").getIntValue("archive_count"), card.getIntValue("fans"), video.getString("title").replace("<em class=\"keyword\">", "").replace("</em>", ""), video.getString("bvid"));
-                        if (user.getSex() == Sex.MALE && male) {
+                        if (user.getSex() == Sex.MALE && (male || all)) {
                             users.add(user);
-                        } else if (user.getSex() == Sex.FEMALE && female) {
+                        } else if (user.getSex() == Sex.FEMALE && (female || all)) {
                             users.add(user);
-                        } else if (user.getSex() == Sex.UNSET && unset) {
+                        } else if (user.getSex() == Sex.UNSET && (unset || all)) {
                             users.add(user);
                         }
                     }
