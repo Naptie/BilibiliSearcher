@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Bilibili" target="14" />
+      <module name="Bilibili" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
